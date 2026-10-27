@@ -7,7 +7,6 @@ import {
   Chip,
   Stack,
   LinearProgress,
-  IconButton,
 } from '@mui/material';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
@@ -16,9 +15,11 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import MovingButton from '../common/MovingButton.jsx';
 import useMovingButton from '../../hooks/useMovingButton.js';
 import { questions } from '../../constants/questions.js';
+import { playSuccessSound, playCelebrationSound } from '../../utils/soundEffects.js';
 
 export function QuestionsScreen({ onComplete, onBackToInvite, onShowToast }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [totalDodges, setTotalDodges] = useState(0);
   const currentQuestion = questions[currentIndex] || questions[0];
 
   const {
@@ -27,14 +28,26 @@ export function QuestionsScreen({ onComplete, onBackToInvite, onShowToast }) {
     isMoved,
     moveButton,
     reset: resetMovingButton,
-  } = useMovingButton();
+  } = useMovingButton({
+    buttonWidth: 180,
+    buttonHeight: 52,
+    padding: 20,
+    playSound: true,
+  });
 
-  // Reset evasive button position when moving between questions
+  // Track total dodges across all 9 tasks
+  const handleDodge = () => {
+    moveButton();
+    setTotalDodges((prev) => prev + 1);
+  };
+
+  // Reset current question's evasive button position when step changes
   useEffect(() => {
     resetMovingButton();
   }, [currentIndex, resetMovingButton]);
 
   const handleNext = () => {
+    playSuccessSound();
     const reaction = currentQuestion.positiveOption.reaction;
     if (onShowToast && reaction) {
       onShowToast(reaction);
@@ -43,9 +56,10 @@ export function QuestionsScreen({ onComplete, onBackToInvite, onShowToast }) {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      // Completed all questions!
+      // Completed all 9 hilarious tasks!
+      playCelebrationSound();
       if (onShowToast) {
-        onShowToast("Quiz completed! Tarun is thrilled! Let’s plan our date 💖");
+        onShowToast("🏆 CONGRATULATIONS! You passed all 9 Tarun Tiwari date challenges with 100%! 💖");
       }
       onComplete();
     }
@@ -61,13 +75,22 @@ export function QuestionsScreen({ onComplete, onBackToInvite, onShowToast }) {
 
   const progressPercent = ((currentIndex + 1) / questions.length) * 100;
 
+  // Funny milestone levels
+  const funnyLevel = React.useMemo(() => {
+    if (currentIndex < 3) return "Level: Innocent Beginner 🐣";
+    if (currentIndex < 6) return "Level: Romantic Danger Zone 🔥";
+    if (currentIndex < 8) return "Level: Certified Rom-Com Expert 🎬";
+    return "Level: Ultimate Soulmate Status 💍";
+  }, [currentIndex]);
+
   return (
     <Box className="planner-wrap">
+      {/* Top navigation actions */}
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={{ mb: 2 }}
+        sx={{ mb: 1.5 }}
       >
         <Button
           startIcon={<ArrowBackRoundedIcon />}
@@ -75,74 +98,110 @@ export function QuestionsScreen({ onComplete, onBackToInvite, onShowToast }) {
           className="back-button"
           sx={{ mb: '0 !important' }}
         >
-          {currentIndex === 0 ? "Back to question" : "Previous"}
+          {currentIndex === 0 ? "Back to question" : "Previous Task"}
         </Button>
 
         <Button
           endIcon={<SkipNextRoundedIcon />}
-          onClick={onComplete}
+          onClick={() => {
+            playCelebrationSound();
+            onComplete();
+          }}
           size="small"
-          sx={{ color: '#a06b7a', fontWeight: 600, fontSize: 13 }}
+          sx={{ color: '#a06b7a', fontWeight: 700, fontSize: 13 }}
         >
-          Skip to planner
+          Skip directly to planner
         </Button>
       </Stack>
 
+      {/* Progress bar & funny level chip */}
       <Box sx={{ width: '100%', mb: 3 }}>
-        <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.8 }}>
-          <Typography variant="caption" fontWeight={700} color="secondary">
-            Question {currentIndex + 1} of {questions.length}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {Math.round(progressPercent)}% answered
+        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.8 }}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography variant="caption" fontWeight={800} color="primary.main">
+              Task {currentIndex + 1} of {questions.length}
+            </Typography>
+            <Chip
+              label={funnyLevel}
+              size="small"
+              sx={{
+                height: 20,
+                fontSize: 10,
+                fontWeight: 700,
+                bgcolor: '#fff0f3',
+                color: '#c72e57',
+                border: '1px solid #f8d0dc',
+              }}
+            />
+          </Stack>
+          <Typography variant="caption" color="text.secondary" fontWeight={600}>
+            {Math.round(progressPercent)}% completed
           </Typography>
         </Stack>
+
         <LinearProgress
           variant="determinate"
           value={progressPercent}
           sx={{
-            height: 8,
-            borderRadius: 4,
+            height: 9,
+            borderRadius: 5,
             bgcolor: 'rgba(232, 74, 114, 0.12)',
             '& .MuiLinearProgress-bar': {
-              borderRadius: 4,
+              borderRadius: 5,
               background: 'linear-gradient(90deg, #ff7a9c, #e84a72)',
             },
           }}
         />
       </Box>
 
+      {/* Main Task Card */}
       <Paper elevation={0} className="invite-card" sx={{ mt: '0 !important' }}>
         <div className="sparkle sparkle-one">✦</div>
         <div className="sparkle sparkle-two">✧</div>
 
-        <Box className="invite-illustration" sx={{ height: 130, mb: 2 }}>
-          <div className="sun-glow" style={{ width: 120, height: 120 }} />
+        {/* Animated Emoji Badge */}
+        <Box className="invite-illustration" sx={{ height: 125, mb: 1.5 }}>
+          <div className="sun-glow" style={{ width: 110, height: 110 }} />
           <div
             className="date-heart"
-            style={{ width: 85, height: 85, fontSize: 40 }}
+            style={{ width: 85, height: 85, fontSize: 42 }}
           >
             {currentQuestion.emoji}
           </div>
         </Box>
 
-        <Chip label={currentQuestion.eyebrow} className="eyebrow-chip" />
+        <Chip label={currentQuestion.category} className="eyebrow-chip" />
 
-        <Typography className="invite-title" component="h2" sx={{ fontSize: 'clamp(28px, 4.5vw, 40px) !important', my: 2 }}>
-          {currentQuestion.question}
+        <Typography
+          className="invite-title"
+          component="h2"
+          sx={{
+            fontSize: 'clamp(26px, 4.2vw, 36px) !important',
+            lineHeight: '1.25 !important',
+            my: 2,
+            px: { xs: 0, sm: 2 },
+          }}
+        >
+          {currentQuestion.title}
         </Typography>
 
-        <Typography color="text.secondary" className="invite-subtitle" sx={{ mb: 3 }}>
+        <Typography
+          color="text.secondary"
+          className="invite-subtitle"
+          sx={{ mb: 2.5, px: { xs: 1, sm: 3 } }}
+        >
           {currentQuestion.subtitle}
         </Typography>
 
-        <Box className="invite-actions" sx={{ minHeight: 65, mt: 3 }}>
+        {/* Interactive Buttons */}
+        <Box className="invite-actions" sx={{ minHeight: 65, mt: 2 }}>
           <Button
             size="large"
             variant="contained"
             startIcon={<FavoriteRoundedIcon />}
             onClick={handleNext}
             className="yes-button"
+            sx={{ px: 3, py: 1.4 }}
           >
             {currentQuestion.positiveOption.label}
           </Button>
@@ -153,16 +212,17 @@ export function QuestionsScreen({ onComplete, onBackToInvite, onShowToast }) {
             dodgeCount={dodgeCount}
             position={position}
             isMoved={isMoved}
-            onDodge={moveButton}
+            onDodge={handleDodge}
             className="no-button"
           />
         </Box>
 
-        <Typography className="tiny-note" sx={{ mt: 3 }}>
+        {/* Footer Hint & Dodge Counter */}
+        <Typography className="tiny-note" sx={{ mt: 3, px: 1 }}>
           <AutoAwesomeRoundedIcon sx={{ fontSize: 14, color: '#e84a72' }} />
           {dodgeCount === 0
             ? currentQuestion.evasiveOption.hint
-            : `Attempted dodges: ${dodgeCount} — Tarun's answer is destiny! ✨`}
+            : `Attempted dodges on this task: ${dodgeCount} (Total dodges: ${totalDodges}) — Tarun's answer is destiny! 💖`}
         </Typography>
       </Paper>
     </Box>

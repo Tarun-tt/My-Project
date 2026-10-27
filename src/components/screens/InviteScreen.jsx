@@ -4,6 +4,7 @@ import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import MovingButton from '../common/MovingButton.jsx';
 import useMovingButton from '../../hooks/useMovingButton.js';
+import { playSuccessSound } from '../../utils/soundEffects.js';
 
 export function InviteScreen({ onAccept }) {
   const {
@@ -11,17 +12,26 @@ export function InviteScreen({ onAccept }) {
     position,
     isMoved,
     moveButton,
-  } = useMovingButton();
+  } = useMovingButton({
+    buttonWidth: 160,
+    buttonHeight: 56,
+    playSound: true,
+  });
 
   const noDodges = [
     "Wait, no! 😅",
-    "You almost got me 😳",
-    "Are you really sure? 🥺",
-    "Tarun won't take no! 😉",
-    "Catch me if you can! 🏃💨",
+    "Almost got me! 😳",
+    "Are you sure? 🥺",
+    "Tarun says nope! 😉",
+    "Catch me! 🏃💨",
     "Nice try, cutie! 💖",
-    "Universe strictly says YES! 💘",
+    "Universe says YES! 💘",
   ];
+
+  const handleAccept = () => {
+    playSuccessSound();
+    onAccept();
+  };
 
   return (
     <Paper elevation={0} className="invite-card">
@@ -38,7 +48,7 @@ export function InviteScreen({ onAccept }) {
         <span className="float-emoji e3">💌</span>
       </Box>
 
-      <Chip label="A SPECIAL INVITATION FROM TARUN TIWARI" className="eyebrow-chip" />
+      <Chip label="A VERY SPECIAL INVITATION FROM TARUN TIWARI" className="eyebrow-chip" />
 
       <Typography className="invite-title" component="h1">
         Will you go on a<br />
@@ -55,7 +65,7 @@ export function InviteScreen({ onAccept }) {
           size="large"
           variant="contained"
           startIcon={<FavoriteRoundedIcon />}
-          onClick={onAccept}
+          onClick={handleAccept}
           className="yes-button"
         >
           Yes, I’d love to! 💖

@@ -9,6 +9,8 @@ import QuestionsScreen from "./components/screens/QuestionsScreen.jsx";
 import PlannerScreen from "./components/screens/PlannerScreen.jsx";
 import ConfirmedScreen from "./components/screens/ConfirmedScreen.jsx";
 
+import { playCelebrationSound } from "./utils/soundEffects.js";
+
 export default function App() {
   // Screens: 'invite' -> 'questions' -> 'planner' -> 'confirmed'
   const [screen, setScreen] = useState("invite");
@@ -45,6 +47,7 @@ export default function App() {
       setSnackMessage("Please pick a date first so Tarun can lock it in! 💌");
       return;
     }
+    playCelebrationSound();
     setScreen("confirmed");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -54,7 +57,9 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSharePlan = async () => {
+  const TARUN_WHATSAPP_NUMBER = "919999841038";
+
+  const generateDateText = () => {
     const readableDate = date
       ? new Date(`${date}T12:00:00`).toLocaleDateString(undefined, {
           weekday: "long",
@@ -64,23 +69,32 @@ export default function App() {
         })
       : "Date to be decided";
 
-    const guestText = dateName ? `with ${dateName}` : "";
-    const text = `💗 Date with Tarun Tiwari ${guestText} 💗\n📅 ${readableDate} at ${time}\n📍 ${restaurant}\n✨ Activity: ${activity}\n👗 Outfit: ${dressCode}\n💌 Note: ${message}\n\nOfficial confirmation by Tarun Tiwari ✨`;
+    const senderText = dateName ? `\n👤 *From:* ${dateName}` : "";
+    const noteText = message ? `\n💌 *Note for Tarun:* "${message}"` : "";
 
+    return `💖 *OUR DATE IS CONFIRMED!* 💖\n\nHey Tarun! Here are the details for our date:\n\n📅 *When:* ${readableDate} at ${time}\n📍 *Where:* ${restaurant}\n✨ *Activity:* ${activity}\n👗 *Outfit Vibe:* ${dressCode}\n💰 *Budget:* ₹${budget.toLocaleString("en-IN")} for two${senderText}${noteText}\n\nCan't wait to see you, Tarun! 🥰✨`;
+  };
+
+  const handleShareToWhatsApp = () => {
+    const text = generateDateText();
+    const encodedText = encodeURIComponent(text);
+    const whatsappUrl = `https://wa.me/${TARUN_WHATSAPP_NUMBER}?text=${encodedText}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    setSnackMessage("Opening WhatsApp to send your date plan directly to Tarun (+91 9999841038)! 💬💖");
+  };
+
+  const handleCopyPlan = async () => {
+    const text = generateDateText();
     try {
-      if (navigator.share) {
-        await navigator.share({
-          title: "Date with Tarun Tiwari 💗",
-          text,
-        });
-      } else if (navigator.clipboard) {
+      if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
-        setSnackMessage("Date plan copied to clipboard! Ready to share with Tarun 💗");
+        setSnackMessage("Date plan copied to clipboard! 📋💖");
       } else {
         setSnackMessage(text);
       }
     } catch {
-      setSnackMessage("Date plan ready to share with Tarun 💗");
+      setSnackMessage("Date plan ready to copy 📋💖");
     }
   };
 
@@ -136,7 +150,8 @@ export default function App() {
             dressCode={dressCode}
             message={message}
             dateName={dateName}
-            onShare={handleSharePlan}
+            onShareWhatsApp={handleShareToWhatsApp}
+            onCopyPlan={handleCopyPlan}
             onEdit={() => setScreen("planner")}
           />
         )}

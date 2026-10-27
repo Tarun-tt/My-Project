@@ -97,13 +97,11 @@ body {
   margin: 30px auto 0;
   padding: 38px 28px 34px;
   text-align: center;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid rgba(237, 195, 207, 0.65);
-  background: rgba(255, 255, 255, 0.88) !important;
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.92) !important;
   box-shadow: 0 22px 80px rgba(159, 70, 97, 0.09) !important;
   border-radius: 28px !important;
-  transition: transform 0.25s ease;
 }
 
 .invite-illustration {
@@ -231,6 +229,12 @@ body {
 .no-button:hover {
   border-color: #e84a72 !important;
   background: #fff5f7 !important;
+}
+
+@keyframes wiggle {
+  0% { transform: scale(0.92) rotate(-3deg); }
+  50% { transform: scale(1.06) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
 .tiny-note {
@@ -537,5 +541,8 @@ body {
   }
   .summary-card {
     padding: 16px;
+  }
+  .romantic-calendar-card {
+    padding: 14px 10px !important;
   }
 }

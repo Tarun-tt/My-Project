@@ -7,6 +7,7 @@ import CelebrationRoundedIcon from '@mui/icons-material/CelebrationRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { restaurants } from '../../constants/restaurants.js';
 
 export function ConfirmedScreen({
@@ -18,7 +19,8 @@ export function ConfirmedScreen({
   dressCode,
   message,
   dateName,
-  onShare,
+  onShareWhatsApp,
+  onCopyPlan,
   onEdit,
 }) {
   const chosenRestaurant =
@@ -55,9 +57,10 @@ export function ConfirmedScreen({
       </Typography>
 
       <Typography color="text.secondary" className="invite-subtitle">
-        Tarun has received your confirmation! Here is your official date invitation summary.
+        Tarun has received your confirmation! Here is your official date invitation pass.
       </Typography>
 
+      {/* Date Pass Summary Card */}
       <Paper elevation={0} className="summary-card">
         <Stack spacing={2.2}>
           <Stack direction="row" spacing={1.5} alignItems="center">
@@ -65,10 +68,10 @@ export function ConfirmedScreen({
               <CalendarMonthRoundedIcon />
             </Avatar>
             <Box>
-              <Typography variant="caption" color="text.secondary" fontWeight={700}>
+              <Typography variant="caption" color="text.secondary" fontWeight={750}>
                 WHEN
               </Typography>
-              <Typography fontWeight={800} fontSize={15}>
+              <Typography fontWeight={800} fontSize={15.5}>
                 {formattedDate}
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -82,10 +85,10 @@ export function ConfirmedScreen({
               <RestaurantRoundedIcon />
             </Avatar>
             <Box>
-              <Typography variant="caption" color="text.secondary" fontWeight={700}>
+              <Typography variant="caption" color="text.secondary" fontWeight={750}>
                 WHERE
               </Typography>
-              <Typography fontWeight={800} fontSize={15}>
+              <Typography fontWeight={800} fontSize={15.5}>
                 {chosenRestaurant.name} {chosenRestaurant.emoji}
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -99,21 +102,21 @@ export function ConfirmedScreen({
               <CelebrationRoundedIcon />
             </Avatar>
             <Box>
-              <Typography variant="caption" color="text.secondary" fontWeight={700}>
+              <Typography variant="caption" color="text.secondary" fontWeight={750}>
                 THE VIBE & ACTIVITY
               </Typography>
-              <Typography fontWeight={800} fontSize={15}>
+              <Typography fontWeight={800} fontSize={15.5}>
                 {activity}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Dress code: {dressCode}
+                Outfit: {dressCode}
               </Typography>
             </Box>
           </Stack>
 
           {message && (
             <Box className="note-card">
-              <Typography variant="caption" color="text.secondary" fontWeight={700}>
+              <Typography variant="caption" color="text.secondary" fontWeight={750}>
                 NOTE FOR TARUN
               </Typography>
               <Typography fontStyle="italic" sx={{ mt: 0.5, fontSize: 14 }}>
@@ -122,41 +125,84 @@ export function ConfirmedScreen({
             </Box>
           )}
 
-          <Box sx={{ pt: 1, borderTop: '1px dashed #f1dce2', textAlign: 'center' }}>
+          <Box sx={{ pt: 1.2, borderTop: '1px dashed #f1dce2', textAlign: 'center' }}>
+            <Typography variant="caption" color="text.secondary" display="block">
+              Host: <strong>Tarun Tiwari</strong> (WhatsApp: <strong>+91 9999841038</strong>)
+            </Typography>
             <Typography variant="caption" color="text.secondary">
-              Host: <strong>Tarun Tiwari</strong> • Guest: <strong>{dateName || "Special Someone"}</strong>
+              Guest of Honor: <strong>{dateName || "Special Someone"}</strong>
             </Typography>
           </Box>
         </Stack>
       </Paper>
 
+      {/* Sharing & Navigation Actions */}
       <Stack
         direction={{ xs: "column", sm: "row" }}
         spacing={1.5}
         className="confirmation-actions"
+        sx={{ mt: 2 }}
       >
+        {/* Main WhatsApp Share Button */}
         <Button
           variant="contained"
           size="large"
-          startIcon={<ContentCopyRoundedIcon />}
-          onClick={onShare}
-          sx={{ background: 'linear-gradient(100deg, #eb5479, #d93663)' }}
+          startIcon={<WhatsAppIcon sx={{ fontSize: '22px !important' }} />}
+          onClick={onShareWhatsApp}
+          sx={{
+            background: 'linear-gradient(100deg, #25D366, #128C7E) !important',
+            color: '#ffffff !important',
+            boxShadow: '0 8px 24px rgba(37, 211, 102, 0.35) !important',
+            fontWeight: 800,
+            fontSize: '15px',
+            '&:hover': {
+              background: '#075E54 !important',
+              transform: 'translateY(-1px)',
+            },
+          }}
         >
-          Share Our Date Plan
+          Share Our Date Plan to WhatsApp
         </Button>
 
+        {/* Copy to Clipboard Button */}
+        <Button
+          variant="outlined"
+          size="large"
+          startIcon={<ContentCopyRoundedIcon />}
+          onClick={onCopyPlan}
+          sx={{
+            borderColor: '#f2ccd6',
+            color: '#7b5364',
+            '&:hover': {
+              borderColor: '#e84a72',
+              bgcolor: '#fff0f3',
+            },
+          }}
+        >
+          Copy Plan
+        </Button>
+
+        {/* Modify Plan Button */}
         <Button
           variant="outlined"
           size="large"
           startIcon={<RestartAltRoundedIcon />}
           onClick={onEdit}
+          sx={{
+            borderColor: '#f2ccd6',
+            color: '#7b5364',
+            '&:hover': {
+              borderColor: '#e84a72',
+              bgcolor: '#fff0f3',
+            },
+          }}
         >
           Modify Plan
         </Button>
       </Stack>
 
-      <Typography className="tiny-note">
-        <FavoriteRoundedIcon sx={{ fontSize: 14 }} /> Tarun can’t wait to see you!
+      <Typography className="tiny-note" sx={{ mt: 2.5 }}>
+        <FavoriteRoundedIcon sx={{ fontSize: 14 }} /> Sending directly to Tarun (+91 9999841038) 💬💖
       </Typography>
     </Paper>
   );

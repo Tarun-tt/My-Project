@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Stack, Avatar, Typography, Paper } from '@mui/material';
 import RestaurantRoundedIcon from '@mui/icons-material/RestaurantRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import { restaurants } from '../../constants/restaurants.js';
 
 export function RestaurantPicker({ restaurant, setRestaurant }) {
@@ -12,7 +13,7 @@ export function RestaurantPicker({ restaurant, setRestaurant }) {
         </Avatar>
         <Box>
           <Typography fontWeight={800} fontSize={17}>
-            Where should Tarun take you?
+            Where should Tarun take you? 🍷🍝
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Choose the culinary vibe for your special date.
@@ -21,36 +22,44 @@ export function RestaurantPicker({ restaurant, setRestaurant }) {
       </Stack>
 
       <Box className="restaurant-grid">
-        {restaurants.map((r) => (
-          <Paper
-            key={r.name}
-            elevation={0}
-            onClick={() => setRestaurant(r.name)}
-            className={`restaurant-option ${restaurant === r.name ? "selected" : ""}`}
-          >
-            <Box className="restaurant-emoji" sx={{ background: r.color }}>
-              {r.emoji}
-            </Box>
-            <Box flex={1} minWidth={0}>
-              <Typography fontWeight={800} fontSize={14}>
-                {r.name}
+        {restaurants.map((r) => {
+          const isSelected = restaurant === r.name;
+          return (
+            <Paper
+              key={r.name}
+              elevation={0}
+              onClick={() => setRestaurant(r.name)}
+              className={`restaurant-option ${isSelected ? "selected" : ""}`}
+            >
+              <Box className="restaurant-emoji" sx={{ background: r.color }}>
+                {r.emoji}
+              </Box>
+              <Box flex={1} minWidth={0}>
+                <Stack direction="row" alignItems="center" spacing={0.5}>
+                  <Typography fontWeight={800} fontSize={14}>
+                    {r.name}
+                  </Typography>
+                  {isSelected && (
+                    <FavoriteRoundedIcon sx={{ fontSize: 14, color: '#e84a72' }} />
+                  )}
+                </Stack>
+                <Typography variant="caption" color="text.secondary" display="block">
+                  {r.cuisine}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {r.desc}
+                </Typography>
+              </Box>
+              <Typography fontWeight={800} color="primary.main">
+                {r.price}
               </Typography>
-              <Typography variant="caption" color="text.secondary" display="block">
-                {r.cuisine}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {r.desc}
-              </Typography>
-            </Box>
-            <Typography fontWeight={800} color="primary.main">
-              {r.price}
-            </Typography>
-          </Paper>
-        ))}
+            </Paper>
+          );
+        })}
       </Box>
 
       <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1.4 }}>
-        💡 Feel free to pick "Surprise Tarun" if you want to let Tarun decide or surprise him!
+        💡 Feel free to pick "Surprise Tarun" if you want to let Tarun choose a secret romantic spot!
       </Typography>
     </Box>
   );

@@ -1,21 +1,23 @@
 import { useState, useCallback, useEffect } from 'react';
+import { playBoingSound } from '../utils/soundEffects.js';
 
 /**
- * Custom hook to create a playful evasive button that moves away
- * whenever hovered, focused, clicked, or tapped.
+ * Custom hook to manage an evasive button that playfully jumps
+ * within the visible browser viewport and never disappears.
  */
 export function useMovingButton(options = {}) {
   const {
-    padding = 24,
-    buttonWidth = 170,
-    buttonHeight = 56,
+    padding = 20,
+    buttonWidth = 180,
+    buttonHeight = 52,
+    playSound = true,
   } = options;
 
   const [dodgeCount, setDodgeCount] = useState(0);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isMoved, setIsMoved] = useState(false);
 
-  // Reset positioning when needed (e.g. question changes)
+  // Reset positioning when question / task changes
   const reset = useCallback(() => {
     setDodgeCount(0);
     setPosition({ top: 0, left: 0 });
@@ -25,53 +27,70 @@ export function useMovingButton(options = {}) {
   const moveButton = useCallback(() => {
     if (typeof window === 'undefined') return;
 
+    if (playSound) {
+      playBoingSound();
+    }
+
+    // Gentle haptic feedback on mobile if supported
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate(35);
+      } catch (e) {
+        // ignore
+      }
+    }
+
     setDodgeCount((prev) => prev + 1);
     setIsMoved(true);
 
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-    // Available bounds inside viewport
-    const maxX = Math.max(padding, viewportWidth - buttonWidth - padding);
-    const maxY = Math.max(padding, viewportHeight - buttonHeight - padding);
+    // Safety margins
+    const effectiveWidth = Math.min(buttonWidth, vw - padding * 2);
+    const effectiveHeight = Math.min(buttonHeight, vh - padding * 2);
 
-    // Random safe coordinate
-    const randomLeft = Math.floor(padding + Math.random() * (maxX - padding));
-    const randomTop = Math.floor(padding + Math.random() * (maxY - padding));
+    const minX = padding;
+    const maxX = Math.max(minX, vw - effectiveWidth - padding);
+
+    // Keep top within safe visible screen area (leave room for mobile address bar & header)
+    const minY = Math.max(padding, 60);
+    const maxY = Math.max(minY, vh - effectiveHeight - padding);
+
+    // Generate random coordinates inside safe boundaries
+    const newLeft = Math.floor(minX + Math.random() * (maxX - minX));
+    const newTop = Math.floor(minY + Math.random() * (maxY - minY));
 
     setPosition({
-      left: Math.max(padding, Math.min(randomLeft, viewportWidth - buttonWidth - padding)),
-      top: Math.max(padding, Math.min(randomTop, viewportHeight - buttonHeight - padding)),
+      left: Math.max(minX, Math.min(newLeft, maxX)),
+      top: Math.max(minY, Math.min(newTop, maxY)),
     });
-  }, [padding, buttonWidth, buttonHeight]);
+  }, [padding, buttonWidth, buttonHeight, playSound]);
 
-  // Adjust coordinates if viewport resizes while button is active
+  // Handle window resize dynamically to keep button in viewport
   useEffect(() => {
     const handleResize = () => {
       if (!isMoved) return;
-      setPosition((prev) => {
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        return {
-          left: Math.min(prev.left, Math.max(padding, viewportWidth - buttonWidth - padding)),
-          top: Math.min(prev.top, Math.max(padding, viewportHeight - buttonHeight - padding)),
-        };
-      });
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const effectiveWidth = Math.min(buttonWidth, vw - padding * 2);
+      const effectiveHeight = Math.min(buttonHeight, vh - padding * 2);
+
+      const minX = padding;
+      const maxX = Math.max(minX, vw - effectiveWidth - padding);
+      const minY = Math.max(padding, 60);
+      const maxY = Math.max(minY, vh - effectiveHeight - padding);
+
+      setPosition((prev) => ({
+        left: Math.max(minX, Math.min(prev.left, maxX)),
+        top: Math.max(minY, Math.min(prev.top, maxY)),
+      }));
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isMoved, padding, buttonWidth, buttonHeight]);
-
-  const getDodgeLabel = useCallback(
-    (initialLabel = "No", dodges = []) => {
-      if (!isMoved || dodgeCount === 0) return initialLabel;
-      if (!dodges || dodges.length === 0) return `Dodged! (${dodgeCount}) 😜`;
-      const index = (dodgeCount - 1) % dodges.length;
-      return dodges[index];
-    },
-    [isMoved, dodgeCount]
-  );
 
   return {
     dodgeCount,
@@ -79,7 +98,6 @@ export function useMovingButton(options = {}) {
     isMoved,
     moveButton,
     reset,
-    getDodgeLabel,
   };
 }
 

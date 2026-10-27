@@ -1,8 +1,11 @@
 import React from 'react';
-import { Button, Badge } from '@mui/material';
+import { createPortal } from 'react-dom';
+import { Button, Box, Typography } from '@mui/material';
 
 /**
- * Reusable moving button component that evades cursor / touch
+ * Reusable evasive button component that dodges cursor / touch
+ * Uses React Portal to document.body when moved so it is NEVER clipped
+ * by parent cards, overflow properties, or CSS backdrop filters.
  */
 export function MovingButton({
   label,
@@ -15,7 +18,6 @@ export function MovingButton({
   color = "secondary",
   size = "large",
   className = "no-button",
-  sx = {},
   disabled = false,
 }) {
   const currentLabel = React.useMemo(() => {
@@ -26,40 +28,87 @@ export function MovingButton({
 
   const handleEvasion = (e) => {
     if (disabled) return;
-    if (e.type === 'touchstart') {
-      // Prevent immediate click simulation on mobile touch
+    if (e && e.cancelable && e.type === 'touchstart') {
       e.preventDefault();
     }
     onDodge();
   };
 
-  const dynamicStyles = isMoved
-    ? {
-        position: 'fixed',
-        left: `${position.left}px`,
-        top: `${position.top}px`,
-        zIndex: 9999,
-        transition: 'all 0.16s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        boxShadow: '0 8px 24px rgba(232, 74, 114, 0.25)',
-        ...sx,
-      }
-    : sx;
-
-  return (
+  const buttonElement = (
     <Button
       variant={variant}
       color={color}
       size={size}
       className={className}
       onMouseEnter={handleEvasion}
+      onPointerDown={handleEvasion}
       onTouchStart={handleEvasion}
       onFocus={handleEvasion}
       onClick={handleEvasion}
       disabled={disabled}
-      style={dynamicStyles}
+      sx={
+        isMoved
+          ? {
+              position: 'fixed !important',
+              left: `${position.left}px !important`,
+              top: `${position.top}px !important`,
+              zIndex: 999999,
+              maxWidth: 'calc(100vw - 32px)',
+              background: '#ffffff !important',
+              color: '#c72e57 !important',
+              border: '2px solid #e84a72 !important',
+              boxShadow: '0 10px 30px rgba(217, 54, 99, 0.45) !important',
+              fontWeight: 800,
+              fontSize: '14px',
+              transition: 'all 0.14s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              pointerEvents: 'auto',
+              cursor: 'pointer',
+              userSelect: 'none',
+              animation: 'wiggle 0.3s ease',
+            }
+          : {
+              background: '#ffffff !important',
+              color: '#805a66 !important',
+              border: '1.5px solid #efcbd5 !important',
+            }
+      }
     >
       {currentLabel}
     </Button>
+  );
+
+  // If not moved yet, render normally in place
+  if (!isMoved) {
+    return buttonElement;
+  }
+
+  // When moved, render a placeholder in the original spot to keep layout stable,
+  // and portal the active moving button directly to document.body so it NEVER disappears!
+  return (
+    <>
+      <Box
+        className="no-placeholder"
+        sx={{
+          minWidth: 120,
+          height: 48,
+          borderRadius: 999,
+          border: '1.5px dashed #f1cbd5',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          px: 2,
+          opacity: 0.7,
+        }}
+      >
+        <Typography variant="caption" color="text.secondary" fontWeight={600}>
+          🏃 Escaped!
+        </Typography>
+      </Box>
+
+      {typeof document !== 'undefined'
+        ? createPortal(buttonElement, document.body)
+        : buttonElement}
+    </>
   );
 }
 
