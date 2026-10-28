@@ -136,6 +136,78 @@ export function ConfirmedScreen({
         </Stack>
       </Paper>
 
+      {/* Date Night Perks & Affiliate Recommendations */}
+      <Box
+        sx={{
+          mt: 2.5,
+          p: 2,
+          borderRadius: '18px',
+          bgcolor: '#fff0f3',
+          border: '1.5px dashed #f472b6',
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="caption" fontWeight={900} color="#be185d" letterSpacing={1} sx={{ textTransform: 'uppercase' }}>
+          ✨ DATE NIGHT ESSENTIALS & PARTNER PERKS
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 1.5, fontSize: 13 }}>
+          Make tonight extra special with these instant reservations and gifts:
+        </Typography>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} justifyContent="center">
+          <Button
+            size="small"
+            variant="contained"
+            href="https://www.zomato.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#cb202d',
+              color: '#fff',
+              fontWeight: 800,
+              borderRadius: '10px',
+              fontSize: 12,
+              '&:hover': { bgcolor: '#9c141e' },
+            }}
+          >
+            🍕 Reserve on Zomato
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            href="https://in.bookmyshow.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#e01e37',
+              color: '#fff',
+              fontWeight: 800,
+              borderRadius: '10px',
+              fontSize: 12,
+              '&:hover': { bgcolor: '#bd1f36' },
+            }}
+          >
+            🍿 Book Movies
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            href="https://www.fnp.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#7209b7',
+              color: '#fff',
+              fontWeight: 800,
+              borderRadius: '10px',
+              fontSize: 12,
+              '&:hover': { bgcolor: '#560bad' },
+            }}
+          >
+            💐 Send Flowers
+          </Button>
+        </Stack>
+      </Box>
+
       {/* Sharing & Navigation Actions */}
       <Stack
         direction={{ xs: "column", sm: "row" }}

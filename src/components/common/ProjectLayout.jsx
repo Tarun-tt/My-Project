@@ -23,10 +23,12 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
 import RocketLaunchRoundedIcon from '@mui/icons-material/RocketLaunchRounded';
+import LocalCafeRoundedIcon from '@mui/icons-material/LocalCafeRounded';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useThemeMode } from '../../context/ThemeContext.jsx';
 import { PROJECTS } from '../../data/projectsData.js';
 import DeveloperOptionsModal from './DeveloperOptionsModal.jsx';
+import TipModal from './TipModal.jsx';
 
 export function ProjectLayout({
   title,
@@ -43,6 +45,7 @@ export function ProjectLayout({
   const [isMuted, setIsMuted] = useState(false);
   const [toast, setToast] = useState('');
   const [devModalOpen, setDevModalOpen] = useState(false);
+  const [tipModalOpen, setTipModalOpen] = useState(false);
 
   // Find index of current project for next/previous navigation
   const currentIndex = PROJECTS.findIndex(
@@ -147,6 +150,17 @@ export function ProjectLayout({
                   </IconButton>
                 </Tooltip>
               )}
+
+              {/* Buy a Chai / Tip Button */}
+              <Tooltip title="Buy Tarun a Chai / Coffee ☕">
+                <IconButton
+                  size="small"
+                  onClick={() => setTipModalOpen(true)}
+                  sx={{ color: '#f59e0b' }}
+                >
+                  <LocalCafeRoundedIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
 
               {/* Developer Options Button */}
               <Tooltip title="Developer Options 🛠️">
@@ -254,6 +268,9 @@ export function ProjectLayout({
 
       {/* Developer Options Modal */}
       <DeveloperOptionsModal open={devModalOpen} onClose={() => setDevModalOpen(false)} />
+
+      {/* Tip / Support Modal */}
+      <TipModal open={tipModalOpen} onClose={() => setTipModalOpen(false)} />
     </Box>
   );
 }

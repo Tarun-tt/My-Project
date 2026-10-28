@@ -26,12 +26,16 @@ import { useThemeMode } from '../../context/ThemeContext.jsx';
 import { PROJECTS } from '../../data/projectsData.js';
 import { playSuccessSound } from '../../utils/soundEffects.js';
 import DeveloperOptionsModal from '../common/DeveloperOptionsModal.jsx';
+import TipModal from '../common/TipModal.jsx';
+import AdvertiseModal from '../common/AdvertiseModal.jsx';
 
 export function Navbar({ onOpenAbout, onScrollToProjects }) {
   const navigate = useNavigate();
   const { mode, toggleTheme } = useThemeMode();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [devModalOpen, setDevModalOpen] = useState(false);
+  const [tipModalOpen, setTipModalOpen] = useState(false);
+  const [adModalOpen, setAdModalOpen] = useState(false);
   const [logoClicks, setLogoClicks] = useState(0);
 
   const handleLogoClick = () => {
@@ -164,6 +168,28 @@ export function Navbar({ onOpenAbout, onScrollToProjects }) {
               Feeling Bored? 🎲
             </Button>
 
+            {/* Tip / Support Button */}
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => setTipModalOpen(true)}
+              sx={{
+                display: { xs: 'none', sm: 'flex' },
+                borderColor: '#f59e0b',
+                color: '#d97706',
+                fontWeight: 800,
+                fontSize: 12.5,
+                borderRadius: '12px',
+                px: 1.5,
+                '&:hover': {
+                  borderColor: '#d97706',
+                  bgcolor: mode === 'dark' ? 'rgba(245, 158, 11, 0.12)' : '#fffbeb',
+                },
+              }}
+            >
+              ☕ Tip Tarun
+            </Button>
+
             {/* Developer Options Button */}
             <Tooltip title="Developer Options 🛠️">
               <IconButton
@@ -258,6 +284,26 @@ export function Navbar({ onOpenAbout, onScrollToProjects }) {
             <ListItemButton
               onClick={() => {
                 setMobileOpen(false);
+                setTipModalOpen(true);
+              }}
+            >
+              <ListItemText primary="☕ Tip Tarun (Buy a Chai)" primaryTypographyProps={{ fontWeight: 800, color: '#d97706' }} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                setMobileOpen(false);
+                setAdModalOpen(true);
+              }}
+            >
+              <ListItemText primary="📢 Advertise with Us" primaryTypographyProps={{ fontWeight: 800, color: '#6366f1' }} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                setMobileOpen(false);
                 setDevModalOpen(true);
               }}
             >
@@ -285,6 +331,8 @@ export function Navbar({ onOpenAbout, onScrollToProjects }) {
       </Drawer>
 
       <DeveloperOptionsModal open={devModalOpen} onClose={() => setDevModalOpen(false)} />
+      <TipModal open={tipModalOpen} onClose={() => setTipModalOpen(false)} />
+      <AdvertiseModal open={adModalOpen} onClose={() => setAdModalOpen(false)} />
     </Box>
   );
 }

@@ -587,6 +587,35 @@ export default function BestFriendApp() {
                 </Stack>
               </Card>
 
+              {/* Official Merch & Mug Print Affiliate */}
+              <Box
+                sx={{
+                  bgcolor: '#ecfdf5',
+                  p: 2,
+                  borderRadius: '16px',
+                  border: '1.5px dashed #059669',
+                  textAlign: 'center',
+                  mb: 3,
+                }}
+              >
+                <Typography variant="caption" fontWeight={900} color="#065f46" letterSpacing={1}>
+                  🎁 PERMANENT FRIENDSHIP SOUVENIR
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 1.5, fontSize: 13 }}>
+                  Surprise your best friend with their certified contract printed on a custom mug or t-shirt:
+                </Typography>
+                <Button
+                  size="small"
+                  variant="contained"
+                  href="https://www.amazon.in/s?k=personalized+best+friend+mug"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ bgcolor: '#059669', color: '#fff', fontWeight: 800, borderRadius: '10px', fontSize: 12, '&:hover': { bgcolor: '#047857' } }}
+                >
+                  ☕ Print on Custom Best Friend Mug
+                </Button>
+              </Box>
+
               {/* Actions */}
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <Button

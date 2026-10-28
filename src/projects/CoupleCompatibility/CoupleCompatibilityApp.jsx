@@ -508,7 +508,7 @@ export default function CoupleCompatibilityApp() {
                 </Box>
 
                 {/* Strengths & Hazards */}
-                <Stack spacing={2} sx={{ mb: 3 }}>
+                <Stack spacing={2} sx={{ mb: 2.5 }}>
                   <Box sx={{ bgcolor: 'background.paper', p: 2, borderRadius: '16px', border: '1px solid #fbcfe8' }}>
                     <Typography variant="subtitle2" fontWeight={900} color="#059669" sx={{ mb: 1 }}>
                       ✨ Superpowers & Shared Habits:
@@ -531,6 +531,47 @@ export default function CoupleCompatibilityApp() {
                     ))}
                   </Box>
                 </Stack>
+
+                {/* Peace Offering & Romantic Treats Affiliate Box */}
+                <Box
+                  sx={{
+                    bgcolor: '#fff0f3',
+                    p: 2,
+                    borderRadius: '16px',
+                    border: '1.5px dashed #f472b6',
+                    textAlign: 'center',
+                    mb: 3,
+                  }}
+                >
+                  <Typography variant="caption" fontWeight={900} color="#be185d" letterSpacing={1}>
+                    🍨 RECOMMENDED PEACE OFFERING
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 1.5, fontSize: 13 }}>
+                    Scientifically proven to resolve AC arguments and stolen french fries:
+                  </Typography>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} justifyContent="center">
+                    <Button
+                      size="small"
+                      variant="contained"
+                      href="https://www.swiggy.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ bgcolor: '#fc8019', color: '#fff', fontWeight: 800, borderRadius: '10px', fontSize: 12, '&:hover': { bgcolor: '#e26903' } }}
+                    >
+                      🍕 Order Peace Pizza
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      href="https://www.amazon.in"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ bgcolor: '#232f3e', color: '#fff', fontWeight: 800, borderRadius: '10px', fontSize: 12, '&:hover': { bgcolor: '#131921' } }}
+                    >
+                      🎁 Browse Couple Gifts
+                    </Button>
+                  </Stack>
+                </Box>
 
                 <Stack
                   direction={{ xs: 'column', sm: 'row' }}
