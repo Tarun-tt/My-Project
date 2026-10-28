@@ -1,107 +1,115 @@
-# A Special Date with Tarun Tiwari ✨
+# PrankLab — The Internet's Funniest Little Playground 😂💘
 
-A playful, interactive, romantic date invitation and confirmation web application built with **React**, **Vite**, and **Material UI**, authored and designed by **Tarun Tiwari**.
+**PrankLab** is a creative playground and interactive web hub showcasing **12 independent mini-websites**, featuring hilarious pranks, romantic experiments, savage roasts, and things you definitely shouldn't take seriously.
 
----
-
-## 🌟 Key Features
-
-### 1. The Interactive Invitation Screen
-- **Personalized Proposal**: Romantic invitation specifically crafted by Tarun Tiwari.
-- **The Evasive "No" Button**: When the user hovers, touches, focuses, or tries to click "No", the button playfully dodges away to random safe coordinates on the screen with hilarious escalating reactions and spring sound effects (*"Wait, no! 😅"*, *"Catch me if you can! 🏃💨"*, *"Universe strictly says YES! 💘"*).
-- **Floating Hearts**: Atmospheric CSS animation with floating hearts, blossoms, and romantic particles.
-
-### 2. Multi-Step Comedic Date Challenge (9 Hilarious Tasks!)
-When the user clicks **"Yes, I’d love to! 💖"**, they are taken through **9 hilarious compatibility and date tasks**:
-1. **Task 1: Contractual Obligation** — *"Are you 100% sure about this date with Tarun Tiwari?"* (Evasive button: *"Let me consult my lawyer 👨‍⚖️"*).
-2. **Task 2: The French Fry Tax** — *"When Tarun orders French fries, what is your strategy?"* (Evasive button: *"I will steal all your fries 😈"*).
-3. **Task 3: The 'Kuch Bhi' Trap** — *"When Tarun asks 'Where do you want to eat?', what do you say?"* (Evasive button: *"Anything... but not that, or that, or that 🚫"*).
-4. **Task 4: AUX Cord Privileges** — *"Will you allow DJ Tarun to control the music in the car?"* (Evasive button: *"Hand over the AUX or I jump out 🚗💨"*).
-5. **Task 5: Instagram Boyfriend Duty** — *"Will you judge Tarun if he takes 47 photos from 6 weird squatting angles?"* (Evasive button: *"Take 100 photos and zero are usable 🤳"*).
-6. **Task 6: The Movie Sleep Trap** — *"If we watch a movie, do you promise not to fall asleep in the first 12 minutes?"* (Evasive button: *"I'm already sleeping zzz 😴"*).
-7. **Task 7: Dad Joke Insurance** — *"When Tarun drops a notoriously terrible dad joke, how do you react?"* (Evasive button: *"Stare at you in complete disappointment 😐"*).
-8. **Task 8: Dessert Showdown** — *"There is one single piece of chocolate lava cake remaining. What happens?"* (Evasive button: *"I devour the whole thing before you blink 🎂"*).
-9. **Task 9: The Grand Finale** — *"Are you ready for the most unforgettable date of your life with Tarun?"* (Evasive button: *"I need 3 to 5 business days to prepare 📅"*).
-
-- **Evasive Button on Every Task**: Each task features its own unique evasive button with witty comebacks and audio sound effects!
-- **Interactive Sound Effects**: Custom synthesized Web Audio API sound effects (cartoon dodge "boing", success chimes, and celebration fanfare) without external MP3 files.
-- **Progress & Level Tracker**: Dynamic progress bar, total dodge counter across tasks, funny milestone badges, and skip options.
-
-### 3. Date Planner Wizard
-- **Date & Time Selection**: Date picker (with past date protection) and time slot dropdown.
-- **Curated Dining Venues**: Visual cards for dining options (Italian, Japanese, Brunch cafe, Modern Indian, Rooftop, or "Surprise Tarun").
-- **Activity Suggestions**: Cards for sunset walks, dessert runs, movies, live music, arcade games, and stargazing drives.
-- **Finishing Touches**: Outfit vibe selector, interactive budget slider (₹500 - ₹7,000+), personalized date recipient name, and sweet personal note for Tarun.
-
-### 4. Official Confirmation & WhatsApp Sharing
-- **Date Pass Summary**: Elegant boarding pass-style summary of the confirmed date details.
-- **One-Click WhatsApp Sharing to Tarun (+91 9999841038)**: Directly launches WhatsApp (on mobile app or WhatsApp Web) with all customized date plan details pre-formatted and addressed to Tarun Tiwari!
-- **Copy & Modify**: Easily copy the formatted plan to the clipboard or go back to modify any detail.
+Created & Developed by **Tarun Tiwari**.
 
 ---
 
-## 📁 Professional Project Structure
+## 🎪 The 12 Interactive Mini-Projects
+
+| # | Project Name | Route | Category | Description |
+|---|---|---|---|---|
+| **1** | **Date Planner 💕** | `/projects/date-planner` | Dating & Romance | The original classic with 9 compatibility challenges, romantic calendar, and instant WhatsApp booking with Tarun Tiwari (+91 9999841038). |
+| **2** | **The Impossible No Website 💘** | `/projects/impossible-no` | Romantic Prank | A date invitation where the "No" button runs away and the "Yes" button grows bigger after every failed attempt. |
+| **3** | **Roast My Friend 🔥** | `/projects/roast-my-friend` | Comedy & Roasting | Enter your friend's name, choose their fatal flaw (Lazy Legend, Gym Bro, etc.), and receive an algorithmic roast with a burn scorecard. |
+| **4** | **Decide My Life for Me 🎡** | `/projects/decision-wheel` | Random Chaos | Animated canvas spinning wheel for food, movies, weekend plans, or custom choices. Appeals are strictly closed. |
+| **5** | **Apply to Be My Best Friend 😂** | `/projects/best-friend-application` | Friendship Prank | Corporate HR friendship application with aptitude tests, fry tax policies, and official certified friendship passes or hilarious rejection letters. |
+| **6** | **What Kind of Red Flag Are You? 🚩** | `/projects/red-flag-quiz` | Personality Quiz | 10 completely unscientific questions revealing your chaotic archetype (Professional Overthinker, Reply-Destroyer, etc.). |
+| **7** | **Sorry Generator 🥹** | `/projects/sorry-generator` | Messages & Mischief | Multiple apology styles (Puppy Eyes, Oscar Dramatic, Corporate Legal, Bollywood Filmy, Brutally Honest) for every mess-up. |
+| **8** | **Couple Compatibility Lab 💑** | `/projects/couple-compatibility` | Couples & Romance | Analyze couple dynamics (AC temperature cold war, dessert showdown, get-ready time) to calculate compatibility with fictional relationship stats. |
+| **9** | **The World's Worst Productivity App 💻** | `/projects/productivity-parody` | Office Comedy | Track your procrastination by logging every creative way you avoid actual work, unlocking slacker achievements. |
+| **10** | **Ex Text Decoder 📱** | `/projects/ex-text-decoder` | Texting & Relationships | Paste a 1-word text like "k" and receive a dramatic FBI/Bollywood forensic breakdown with threat level meters. |
+| **11** | **Excuse Generator 🤥** | `/projects/excuse-generator` | Everyday Pranks | Creative excuses for being late, missing calls, or skipping family gatherings (Believable, Sci-Fi, Bollywood, Absurd) with a vault to save favorites. |
+| **12** | **Compliment Machine ✨** | `/projects/compliment-machine` | Wholesome Chaos | An automated dispenser giving you the compliments your inner critic forgot to deliver, with daily tracking and sharing. |
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework**: React 19 + Vite
+- **Routing**: React Router DOM (HashRouter for 100% reliable GitHub Pages & static hosting deep-linking)
+- **UI Components**: Material UI (MUI v7) & Emotion
+- **Animations & Effects**: Canvas Confetti, Web Audio API sound synthesis, custom CSS keyframe animations
+- **State & Storage**: LocalStorage for preferences, compliment counters, roast history, and light/dark theme persistence
+- **Performance**: Code-split with `React.lazy()` and `Suspense` for lightning-fast loading
+
+---
+
+## 📁 Project Architecture & Folder Structure
 
 ```text
 date-confirmation-app/
-├── index.html                           # App entry HTML with Tarun Tiwari metadata & favicon
-├── package.json                         # Dependencies, scripts, and author metadata
-├── vite.config.js                       # Vite configuration with React plugin
-├── README.md                            # Comprehensive documentation
-├── .gitignore                             # Clean repository ignore rules
+├── index.html                                 # PrankLab entry HTML
+├── package.json                               # Dependencies & scripts
+├── vite.config.js                             # Vite configuration with relative base './'
+├── README.md                                  # Comprehensive documentation
+├── .github/
+│   └── workflows/
+│       └── deploy.yml                         # Automated GitHub Pages CI/CD workflow
 └── src/
-    ├── main.jsx                         # React 19 entry point with ThemeProvider & CssBaseline
-    ├── App.jsx                          # Root orchestrator managing screens & state flow
-    ├── styles.css                       # Responsive CSS, animations & backdrop filters
+    ├── main.jsx                               # App root with ThemeModeProvider
+    ├── App.jsx                                # HashRouter & Suspense route definitions
+    ├── styles.css                             # Global styling, keyframes & animations
     │
-    ├── theme/
-    │   └── theme.js                     # Material UI theme palette, typography & overrides
+    ├── context/
+    │   └── ThemeContext.jsx                   # Dark/Light theme mode provider & LocalStorage sync
     │
-    ├── constants/
-    │   ├── restaurants.js               # Restaurant options and details
-    │   ├── activities.jsx               # Activities with Material UI icons
-    │   ├── dressCodes.js                # Outfit vibes and time slots
-    │   └── questions.js                 # 9 hilarious comedic tasks and evasive responses
-    │
-    ├── hooks/
-    │   └── useMovingButton.js           # Reusable hook for dodging button logic & viewport bounds
+    ├── data/
+    │   └── projectsData.js                    # Centralized project catalog & metadata
     │
     ├── utils/
-    │   └── soundEffects.js              # Synthesized Web Audio API sound effects (boing, chimes, fanfare)
+    │   ├── confettiHelper.js                  # Particle celebration triggers
+    │   └── soundEffects.js                    # Web Audio API synthesized sounds (boing, chimes, fanfare)
     │
-    └── components/
-        ├── common/
-        │   ├── FloatingHearts.jsx       # Floating background particle animation
-        │   ├── Header.jsx               # Brand header with Tarun's badge & reset action
-        │   ├── Footer.jsx               # Footer with author credits
-        │   ├── MovingButton.jsx         # Reusable evasive moving button component
-        │   └── NotificationSnackbar.jsx # Toast notifications for reactions & shares
-        │
-        ├── screens/
-        │   ├── InviteScreen.jsx         # First screen: "Will you go on a date with Tarun?"
-        │   ├── QuestionsScreen.jsx      # 9-step comedy challenge with moving button
-        │   ├── PlannerScreen.jsx        # Date customization form
-        │   └── ConfirmedScreen.jsx      # Final date summary pass & share buttons
-        │
-        └── planner/
-            ├── DateTimePicker.jsx       # Date & time selection controls
-            ├── RestaurantPicker.jsx     # Restaurant card picker
-            ├── ActivityPicker.jsx       # Activity option picker
-            └── FinalTouches.jsx         # Outfit, budget slider, notes & date's name
+    ├── hooks/
+    │   └── useMovingButton.js                 # Reusable evasive button physics & bounds
+    │
+    ├── components/
+    │   ├── common/
+    │   │   ├── ProjectLayout.jsx              # Reusable project wrapper (top bar, reset, audio toggle)
+    │   │   ├── MovingButton.jsx               # Portal-rendered evasive button
+    │   │   ├── FloatingHearts.jsx             # Background particle animation
+    │   │   ├── Header.jsx                     # Date planner branding
+    │   │   ├── Footer.jsx                     # Date planner footer
+    │   │   └── NotificationSnackbar.jsx       # Alert snackbars
+    │   │
+    │   └── hub/
+    │       ├── HomePage.jsx                   # PrankLab main landing page
+    │       ├── Navbar.jsx                     # Top navigation, random project button, mobile drawer
+    │       ├── HeroSection.jsx                # Hero heading, CTAs, featured project card
+    │       ├── ProjectGrid.jsx                # Filterable & searchable 3-column project grid
+    │       ├── ProjectCard.jsx                # Individual visual card with badges & chaos meter
+    │       ├── AboutModal.jsx                 # About & Code of Conduct modal
+    │       └── Footer.jsx                     # Hub footer & credits
+    │
+    └── projects/
+        ├── DatePlanner/                       # Project 1: Date Planner (Original Classic)
+        ├── ImpossibleNo/                      # Project 2: The Impossible No Website
+        ├── RoastMyFriend/                     # Project 3: Roast My Friend
+        ├── DecisionWheel/                     # Project 4: Decide My Life for Me
+        ├── BestFriendApp/                     # Project 5: Apply to Be My Best Friend
+        ├── RedFlagQuiz/                       # Project 6: What Kind of Red Flag Are You?
+        ├── SorryGenerator/                    # Project 7: Sorry Generator
+        ├── CoupleCompatibility/               # Project 8: Couple Compatibility Lab
+        ├── ProductivityParody/                # Project 9: The World's Worst Productivity App
+        ├── ExTextDecoder/                     # Project 10: Ex Text Decoder
+        ├── ExcuseGenerator/                   # Project 11: Excuse Generator
+        └── ComplimentMachine/                 # Project 12: Compliment Machine
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Running Locally
 
 ```bash
-# 1. Navigate to the project directory
-cd date-confirmation-app
+# 1. Open the project folder
+cd "C:\Users\tarun.tiwari\Downloads\date-confirmation-app\date-confirmation-app"
 
-# 2. Install dependencies (if not already installed)
+# 2. Install dependencies (if needed)
 npm install
 
-# 3. Start local development server
+# 3. Start local Vite development server
 npm run dev
 ```
 
@@ -109,8 +117,29 @@ Open `http://localhost:5173` in your browser.
 
 ---
 
-## 👤 Author
+## 🌐 Deploying to a Live Public URL
+
+### Option A: Vercel (Fastest & 1-Click)
+1. Go to **[vercel.com](https://vercel.com)** and sign in with GitHub.
+2. Click **"Add New Project"** and select **`My-Project`** (by `Tarun-tt`).
+3. Click **"Deploy"**. Your app will be live in 25 seconds with a custom `.vercel.app` URL!
+
+### Option B: GitHub Pages (Automatic on Push)
+The repository is already configured with an automated GitHub Action workflow (`.github/workflows/deploy.yml`):
+```bash
+git add .
+git commit -m "Upgrade to PrankLab Hub with 12 interactive projects"
+git push origin main
+```
+In your GitHub repo:
+1. Go to **Settings** → **Pages**.
+2. Select **Source: GitHub Actions**.
+3. It will publish automatically to `https://tarun-tt.github.io/My-Project/`!
+
+---
+
+## 👤 Author & Credits
 
 **Tarun Tiwari**
-- Project: Date Confirmation & Planner Web App
-- Crafted with ❤️ and comedic flair.
+- Creator & Lead Developer
+- Project: PrankLab — The Internet's Funniest Little Playground 😂
