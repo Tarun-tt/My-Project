@@ -21,9 +21,11 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import LocalCafeRoundedIcon from '@mui/icons-material/LocalCafeRounded';
 import QrCode2RoundedIcon from '@mui/icons-material/QrCode2Rounded';
+import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
 import { useThemeMode } from '../../context/ThemeContext.jsx';
 import { playCelebrationSound, playSuccessSound } from '../../utils/soundEffects.js';
 import { fireConfetti } from '../../utils/confettiHelper.js';
+import tarunUpiQr from '../../assets/tarun-upi-qr.png';
 
 const TIP_TIERS = [
   { amount: 50, label: 'Cup of Chai ☕', desc: 'Fuel a quick joke' },
@@ -38,14 +40,11 @@ export function TipModal({ open, onClose }) {
   const [selectedAmount, setSelectedAmount] = useState(150);
   const [copiedUpi, setCopiedUpi] = useState(false);
 
-  // Tarun Tiwari's UPI ID and phone
-  const upiId = "9999841038@upi";
+  // Tarun Tiwari's Official Verified UPI Details
+  const upiId = "tarun-tiwari@ptyes";
   const payeeName = "Tarun Tiwari";
 
-  const upiPayUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${selectedAmount}&cu=INR&tn=PrankLab%20Supporter`;
-
-  // Dynamic QR Code using public Google Charts API
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiPayUrl)}`;
+  const upiPayUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${selectedAmount}&cu=INR&tn=PrankLab%20Chai%20Tip`;
 
   const handleCopyUpi = () => {
     playSuccessSound();
@@ -62,7 +61,6 @@ export function TipModal({ open, onClose }) {
   const handleInternationalDonation = () => {
     playCelebrationSound();
     fireConfetti();
-    // BuyMeACoffee or PayPal link
     window.open(`https://buymeacoffee.com/taruntiwari`, '_blank');
   };
 
@@ -104,7 +102,7 @@ export function TipModal({ open, onClose }) {
               Support Tarun Tiwari
             </Typography>
             <Typography variant="caption" color="text.secondary" fontWeight={700}>
-              Fuel more pranks & keep servers alive 🚀
+              Official UPI & Barcode Scanner ⚡
             </Typography>
           </Box>
         </Stack>
@@ -115,12 +113,12 @@ export function TipModal({ open, onClose }) {
 
       <DialogContent sx={{ pt: 1 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2, textAlign: 'center' }}>
-          If PrankLab made you laugh, smile, or successfully ask your date out, consider buying Tarun a chai! Every contribution keeps the project 100% free and ad-light.
+          If PrankLab made you laugh or helped you plan a fun date, buy Tarun a chai! Your support directly funds server costs and new chaotic features.
         </Typography>
 
         {/* Preset Amount Chips */}
         <Typography variant="caption" fontWeight={800} color="#b45309" display="block" sx={{ mb: 1 }}>
-          Choose your support level:
+          Select support amount:
         </Typography>
         <Stack spacing={1} sx={{ mb: 2.5 }}>
           {TIP_TIERS.map((tier) => {
@@ -173,40 +171,49 @@ export function TipModal({ open, onClose }) {
             '& .MuiTabs-indicator': { bgcolor: '#d97706' },
           }}
         >
-          <Tab icon={<QrCode2RoundedIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="UPI / GPay / PhonePe" />
-          <Tab icon={<OpenInNewRoundedIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="International / Card" />
+          <Tab icon={<QrCode2RoundedIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="UPI Barcode / QR" />
+          <Tab icon={<OpenInNewRoundedIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="International" />
         </Tabs>
 
-        {/* Tab 0: UPI Display */}
+        {/* Tab 0: UPI Barcode Display */}
         {tabIndex === 0 && (
           <Box sx={{ textAlign: 'center' }}>
             <Box
               sx={{
-                p: 2,
-                borderRadius: '18px',
-                bgcolor: '#ffffff',
+                p: 1.5,
+                borderRadius: '20px',
+                bgcolor: '#1e293b',
                 display: 'inline-block',
-                border: '2px solid #fde68a',
-                boxShadow: '0 8px 24px rgba(245, 158, 11, 0.15)',
+                border: '3px solid #0284c7',
+                boxShadow: '0 12px 32px rgba(2, 132, 199, 0.3)',
                 mb: 2,
               }}
             >
-              <img
-                src={qrCodeUrl}
-                alt="UPI QR Code for Tarun Tiwari"
-                style={{ width: 170, height: 170, display: 'block', borderRadius: 8 }}
+              <Box
+                component="img"
+                src={tarunUpiQr}
+                alt="Tarun Tiwari UPI Barcode"
+                sx={{
+                  width: { xs: 190, sm: 210 },
+                  height: { xs: 190, sm: 210 },
+                  display: 'block',
+                  borderRadius: '12px',
+                  objectFit: 'contain',
+                  bgcolor: '#ffffff',
+                }}
               />
-              <Typography variant="caption" color="#64748b" fontWeight={700} sx={{ mt: 1, display: 'block' }}>
-                Scan with any UPI App (GPay / PhonePe / Paytm)
+              <Typography variant="caption" color="#94a3b8" fontWeight={750} sx={{ mt: 1, display: 'block' }}>
+                Scan with PhonePe, Paytm, GPay, or BHIM
               </Typography>
             </Box>
 
+            {/* UPI ID Copy Card */}
             <Box
               sx={{
                 p: 1.5,
                 borderRadius: '14px',
                 bgcolor: mode === 'dark' ? '#1e293b' : '#f8fafc',
-                border: '1px solid',
+                border: '1.5px solid',
                 borderColor: mode === 'dark' ? '#334155' : '#e2e8f0',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -216,9 +223,9 @@ export function TipModal({ open, onClose }) {
             >
               <Box sx={{ textAlign: 'left' }}>
                 <Typography variant="caption" color="text.secondary" fontWeight={700}>
-                  UPI ID (Tarun Tiwari):
+                  Verified UPI ID (Tarun Tiwari):
                 </Typography>
-                <Typography fontWeight={800} fontSize={14}>
+                <Typography fontWeight={900} fontSize={14.5} color="#0284c7">
                   {upiId}
                 </Typography>
               </Box>
@@ -231,8 +238,8 @@ export function TipModal({ open, onClose }) {
                   borderRadius: '10px',
                   fontWeight: 800,
                   fontSize: 12,
-                  borderColor: copiedUpi ? '#10b981' : '#f59e0b',
-                  color: copiedUpi ? '#10b981' : '#d97706',
+                  borderColor: copiedUpi ? '#10b981' : '#0284c7',
+                  color: copiedUpi ? '#10b981' : '#0284c7',
                 }}
               >
                 {copiedUpi ? "Copied!" : "Copy"}
@@ -247,14 +254,15 @@ export function TipModal({ open, onClose }) {
               sx={{
                 borderRadius: '14px',
                 fontWeight: 900,
-                py: 1.2,
-                bgcolor: '#f59e0b',
+                py: 1.3,
+                background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
                 color: '#ffffff',
-                '&:hover': { bgcolor: '#d97706' },
+                boxShadow: '0 6px 20px rgba(2, 132, 199, 0.4)',
+                '&:hover': { bgcolor: '#0284c7' },
                 display: { xs: 'flex', sm: 'none' },
               }}
             >
-              Tap to Pay ₹{selectedAmount} via UPI App ⚡
+              Tap to Open UPI App & Pay ₹{selectedAmount} ⚡
             </Button>
           </Box>
         )}
@@ -294,7 +302,7 @@ export function TipModal({ open, onClose }) {
         {/* Thank You Note */}
         <Box sx={{ mt: 2.5, textAlign: 'center' }}>
           <Typography variant="caption" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
-            ❤️ "100% of tips fund web hosting, sound effects, and new pranks created by Tarun Tiwari."
+            ❤️ "Tips are sent directly to Tarun Tiwari ({upiId}) to keep PrankLab 100% ad-free & fun."
           </Typography>
         </Box>
       </DialogContent>
