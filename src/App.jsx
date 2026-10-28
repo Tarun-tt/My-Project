@@ -16,6 +16,7 @@ const ProductivityParodyApp = lazy(() => import('./projects/ProductivityParody/P
 const ExTextDecoderApp = lazy(() => import('./projects/ExTextDecoder/ExTextDecoderApp.jsx'));
 const ExcuseGeneratorApp = lazy(() => import('./projects/ExcuseGenerator/ExcuseGeneratorApp.jsx'));
 const ComplimentMachineApp = lazy(() => import('./projects/ComplimentMachine/ComplimentMachineApp.jsx'));
+import InspectBlocker from './components/common/InspectBlocker.jsx';
 
 function LoadingFallback() {
   return (
@@ -43,6 +44,7 @@ function LoadingFallback() {
 export default function App() {
   return (
     <Router>
+      <InspectBlocker />
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           {/* Hub Homepage */}

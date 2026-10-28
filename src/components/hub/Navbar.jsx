@@ -20,15 +20,28 @@ import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import BuildCircleRoundedIcon from '@mui/icons-material/BuildCircleRounded';
 import { useNavigate, Link } from 'react-router-dom';
 import { useThemeMode } from '../../context/ThemeContext.jsx';
 import { PROJECTS } from '../../data/projectsData.js';
 import { playSuccessSound } from '../../utils/soundEffects.js';
+import DeveloperOptionsModal from '../common/DeveloperOptionsModal.jsx';
 
 export function Navbar({ onOpenAbout, onScrollToProjects }) {
   const navigate = useNavigate();
   const { mode, toggleTheme } = useThemeMode();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [devModalOpen, setDevModalOpen] = useState(false);
+  const [logoClicks, setLogoClicks] = useState(0);
+
+  const handleLogoClick = () => {
+    const next = logoClicks + 1;
+    setLogoClicks(next);
+    if (next >= 5) {
+      setDevModalOpen(true);
+      setLogoClicks(0);
+    }
+  };
 
   const handleRandomProject = () => {
     playSuccessSound();
@@ -151,6 +164,19 @@ export function Navbar({ onOpenAbout, onScrollToProjects }) {
               Feeling Bored? 🎲
             </Button>
 
+            {/* Developer Options Button */}
+            <Tooltip title="Developer Options 🛠️">
+              <IconButton
+                onClick={() => setDevModalOpen(true)}
+                sx={{
+                  bgcolor: mode === 'dark' ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.08)',
+                  color: '#6366f1',
+                }}
+              >
+                <BuildCircleRoundedIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
             {/* Dark/Light Mode Toggle */}
             <Tooltip title={mode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
               <IconButton
@@ -228,6 +254,16 @@ export function Navbar({ onOpenAbout, onScrollToProjects }) {
               <ListItemText primary="About PrankLab" />
             </ListItemButton>
           </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                setMobileOpen(false);
+                setDevModalOpen(true);
+              }}
+            >
+              <ListItemText primary="🛠️ Developer Options" />
+            </ListItemButton>
+          </ListItem>
           <ListItem disablePadding sx={{ mt: 2 }}>
             <Button
               fullWidth
@@ -247,6 +283,8 @@ export function Navbar({ onOpenAbout, onScrollToProjects }) {
           </ListItem>
         </List>
       </Drawer>
+
+      <DeveloperOptionsModal open={devModalOpen} onClose={() => setDevModalOpen(false)} />
     </Box>
   );
 }

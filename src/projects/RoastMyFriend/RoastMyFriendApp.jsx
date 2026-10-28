@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Paper,
@@ -7,138 +7,159 @@ import {
   Button,
   Chip,
   Stack,
+  LinearProgress,
   Card,
-  CardContent,
-  Slider,
   Grid,
 } from '@mui/material';
 import LocalFireDepartmentRoundedIcon from '@mui/icons-material/LocalFireDepartmentRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
-import ShareRoundedIcon from '@mui/icons-material/ShareRounded';
 import CasinoRoundedIcon from '@mui/icons-material/CasinoRounded';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import ProjectLayout from '../../components/common/ProjectLayout.jsx';
-import { playSuccessSound } from '../../utils/soundEffects.js';
-import { fireConfetti } from '../../utils/confettiHelper.js';
+import { playSuccessSound, playCelebrationSound } from '../../utils/soundEffects.js';
+import { fireConfetti, fireCannons } from '../../utils/confettiHelper.js';
 
-const PERSONALITIES = [
-  { id: 'lazy', label: 'Lazy Legend', emoji: '🦥', desc: 'Could win an Olympic medal in lying horizontally.' },
-  { id: 'gym', label: 'Gym Bro', emoji: '🏋️‍♂️', desc: 'Drinks protein shakes before brushing their teeth.' },
-  { id: 'overthinker', label: 'Overthinker', emoji: '🧠', desc: 'Analyzes why you used a period instead of an exclamation mark.' },
-  { id: 'gamer', label: 'Gamer', emoji: '🎮', desc: 'Has 4000 hours in game but 0 hours in reality.' },
-  { id: 'drama', label: 'Drama Specialist', emoji: '🎭', desc: 'Life is a daily Bollywood television serial.' },
-  { id: 'late', label: 'Late Responder', emoji: '⏳', desc: 'Replies 3 business weeks later with "omg so sorry was busy".' },
-  { id: 'food', label: 'Food Thief', emoji: '🍟', desc: 'Says "I am not hungry" and devours 85% of your meal.' },
-  { id: 'office', label: 'Office Slacker', emoji: '☕', desc: 'Masters the sacred art of looking stressed while opening 54 empty tabs.' },
+const ROAST_STEPS = [
+  {
+    step: 1,
+    title: "Who is the Suspect?",
+    subtitle: "Enter your friend's legal or street name so we can officially target them.",
+    emoji: "🎯",
+  },
+  {
+    step: 2,
+    title: "Their Worst Sleep Crime",
+    subtitle: "What is their natural biological sleeping catastrophe?",
+    emoji: "🛌",
+    options: [
+      { label: "Snoozes 14 alarms every 5 mins", trait: "alarm_terrorist", desc: "Wakes up the entire neighborhood before themselves." },
+      { label: "Sleeps at 4:30 AM scrolling reels", trait: "vampire", desc: "Photosynthetic, avoids daytime sunlight." },
+      { label: "Can sleep through a category 5 hurricane", trait: "hibernator", desc: "Practically legally deceased on weekends." },
+      { label: "Falls asleep 3 minutes into any movie", trait: "cinema_sleeper", desc: "Always asks 'Who is that?' during the climax." },
+    ],
+  },
+  {
+    step: 3,
+    title: "Texting & Response Felony",
+    subtitle: "How bad is their communication protocol?",
+    emoji: "📱",
+    options: [
+      { label: "Replies 3 business weeks later with 'omg sorry'", trait: "ghost", desc: "Archeological excavation needed for their replies." },
+      { label: "Sends 58 memes while ignoring my question", trait: "meme_distractor", desc: "Active on Instagram, declared missing in WhatsApp." },
+      { label: "Leaves on read and replies in their head", trait: "telepathic", desc: "Thinks mental telepathy delivers text messages." },
+      { label: "Answers an essay with 'k' or '👍'", trait: "cold_blooded", desc: "Single-letter replies causing emotional turmoil." },
+    ],
+  },
+  {
+    step: 4,
+    title: "Food & Snacking Thievery",
+    subtitle: "What is their criminal record when food arrives?",
+    emoji: "🍟",
+    options: [
+      { label: "'I am not hungry' then eats 80% of my fries", trait: "fry_tax_evader", desc: "The French fry bandit of modern times." },
+      { label: "Takes the biggest slice of pizza without remorse", trait: "pizza_pirate", desc: "Eyes the cheesy center like a hawk." },
+      { label: "Spends 45 mins deciding then says 'Kuch bhi'", trait: "indecisive_menace", desc: "Rejecting 14 consecutive restaurant ideas." },
+      { label: "Licks their fingers before offering you a chip", trait: "biohazard", desc: "Questionable dining hygiene practices." },
+    ],
+  },
+  {
+    step: 5,
+    title: "Gym & Fitness Delusion",
+    subtitle: "What is their relationship with physical exercise?",
+    emoji: "🏋️‍♂️",
+    options: [
+      { label: "Buys $200 gym gear and goes once a month", trait: "aesthetic_athlete", desc: "Donates monthly gym fees as a non-profit charity." },
+      { label: "Drinks protein powder like it's water", trait: "whey_monster", desc: "Checks reflection in every car window." },
+      { label: "Their cardio is sprinting to the food delivery rider", trait: "snack_runner", desc: "Only runs when the doorbell rings." },
+      { label: "Thinks stretching while yawning counts as yoga", trait: "couch_monk", desc: "Meditation through horizontal slumber." },
+    ],
+  },
+  {
+    step: 6,
+    title: "Navigation & Direction Disability",
+    subtitle: "How reliable are they when traveling?",
+    emoji: "🗺️",
+    options: [
+      { label: "Argues aggressively with Google Maps", trait: "cartography_rebel", desc: "'The voice lady doesn't know my secret shortcut!'" },
+      { label: "Doesn't know north from their left shoe", trait: "compass_deficient", desc: "Needs GPS to find the kitchen." },
+      { label: "Falls asleep as passenger 4 minutes in", trait: "co_pilot_slumber", desc: "Zero navigation support, 100% snoring." },
+      { label: "Says 'I am 5 mins away' while in the shower", trait: "time_traveler", desc: "Time is merely an illusion to them." },
+    ],
+  },
+  {
+    step: 7,
+    title: "Drama & Inconvenience Handling",
+    subtitle: "How do they handle minor daily inconveniences?",
+    emoji: "🎭",
+    options: [
+      { label: "Sighs deeply like Shakespeare in rainy weather", trait: "tragedy_queen", desc: "Cold coffee is treated like an existential curse." },
+      { label: "Stages a 3-act monologue in group chats", trait: "chat_thespian", desc: "Needs dramatic orchestral background music." },
+      { label: "Immediately googles symptoms and plans funeral", trait: "webmd_victim", desc: "A mild sneeze means 48 hours left to live." },
+      { label: "Says 'I don't care' but secretly plots revenge", trait: "stealth_grudger", desc: "Remembers something you did in July 2018." },
+    ],
+  },
+  {
+    step: 8,
+    title: "Select Roast Severity",
+    subtitle: "How cooked do you want them to be?",
+    emoji: "🌋",
+    options: [
+      { label: "Mild & Playful 🌶️", trait: "mild", desc: "A gentle reality check with a loving hug." },
+      { label: "Medium Spicy 🔥", trait: "medium", desc: "Moderate burns with temporary emotional damage." },
+      { label: "Nuclear Savage 🌋", trait: "nuclear", desc: "Full thermal obliteration. Friendship at risk." },
+    ],
+  },
 ];
 
-const ROAST_TEMPLATES = {
-  lazy: [
-    "{name}'s idea of heavy cardio is rolling over in bed to plug in the phone charger.",
-    "{name} has been sitting on the couch for so long that the cushions have officially registered joint custody.",
-    "If {name} ran as fast as they run away from physical responsibilities, they’d be Usain Bolt.",
-    "{name}'s morning routine consists of snoozing 8 alarms and contemplating the meaning of existence.",
-  ],
-  gym: [
-    "{name} talks about protein so much that even their saliva is 40% whey isolate.",
-    "{name} will flex in the mirror for 35 minutes and then ask you if the lighting is optimal for their deltoids.",
-    "If {name} put half as much effort into relationships as they put into re-racking someone else's weights, they’d be married by now.",
-    "{name}'s favorite romantic date is explaining their creatine cycle to someone holding their breath.",
-  ],
-  overthinker: [
-    "{name} will receive a text saying 'ok' and immediately hire a forensic linguistic team to decode the insult.",
-    "{name}'s brain operates 47 simultaneous conspiracy theories about why the waiter didn't say goodbye.",
-    "If overthinking burned calories, {name} would be invisible by now.",
-    "{name} doesn't just worry about the future; they worry about alternate parallel universes where things went wrong.",
-  ],
-  gamer: [
-    "{name} has saved the digital world 14 times this week but hasn't touched a bar of soap once.",
-    "{name}'s posture looks like an overcooked shrimp clinging to a gaming chair for dear life.",
-    "The only grass {name} has touched in the last six months is the high-res texture pack in Minecraft.",
-    "{name} blames lag for literally everything in life, including why they forgot your birthday.",
-  ],
-  drama: [
-    "{name} can turn a lukewarm cappuccino into a 3-act Shakespearean tragedy with musical interludes.",
-    "If there was an Oscar for sighing dramatically at an inconvenience, {name} would have a shelf full.",
-    "{name}'s diary doesn't have entries; it has official press releases of victimhood.",
-    "Even Bollywood screenwriters call {name} for inspiration on unrealistic family drama.",
-  ],
-  late: [
-    "{name} replies so late that their messages arrive with historical significance and archeological dust.",
-    "You could send a message in a bottle across the Pacific Ocean and it would arrive faster than {name}'s 'Hey sorry just saw this'.",
-    "{name}'s sense of punctuality is like the Loch Ness monster: rumored to exist, but never seen.",
-    "{name}'s favorite lie is 'I’m 5 minutes away' when they are still standing under the shower.",
-  ],
-  food: [
-    "{name} will look directly into your soul, claim they 'aren't hungry', and then inhale your entire plate.",
-    "The French fry tax was literally drafted into international law specifically because of {name}.",
-    "If you leave {name} alone with your snacks for 4 seconds, consider those snacks legally expropriated.",
-    "{name} believes sharing is caring, but only when it is YOUR food being shared.",
-  ],
-  office: [
-    "{name} spends 45 minutes finding the right Spotify playlist to begin a 3-minute Excel spreadsheet task.",
-    "{name}'s contribution to group meetings is vigorously nodding while mentally planning lunch.",
-    "Nobody looks busier than {name} when someone is about to assign an actual task.",
-    "{name} has mastered the keyboard shortcut for Alt+Tab like an esports tournament finalist.",
-  ],
-};
-
 export default function RoastMyFriendApp() {
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [friendName, setFriendName] = useState('');
-  const [selectedPersona, setSelectedPersona] = useState(PERSONALITIES[0].id);
-  const [intensity, setIntensity] = useState('Savage');
-  const [roastResult, setRoastResult] = useState(null);
-  const [copied, setCopied] = useState(false);
-  const [history, setHistory] = useState([]);
+  const [answers, setAnswers] = useState({});
+  const [roastReport, setRoastReport] = useState(null);
 
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('pranklab-roast-history');
-      if (saved) setHistory(JSON.parse(saved));
-    } catch (e) {
-      // ignore
-    }
-  }, []);
+  const currentStep = ROAST_STEPS[currentStepIndex];
 
-  const handleRoast = () => {
-    const targetName = friendName.trim() || 'My Friend';
-    const templates = ROAST_TEMPLATES[selectedPersona] || ROAST_TEMPLATES.lazy;
-    const randomTemplate = templates[Math.floor(Math.random() * templates.length)];
-    const roastText = randomTemplate.replace(/{name}/g, targetName);
-
-    const burnRating = (8.5 + Math.random() * 1.4).toFixed(1);
-    const emotionalDamage = intensity === 'Mild' ? 'Noticeable 🩹' : intensity === 'Savage' ? 'Severe 🔥' : 'Catastrophic 🌋';
-    const personaObj = PERSONALITIES.find((p) => p.id === selectedPersona);
-
-    const result = {
-      name: targetName,
-      roastText,
-      burnRating,
-      emotionalDamage,
-      intensity,
-      persona: personaObj.label,
-      emoji: personaObj.emoji,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-
+  const handleSelectOption = (trait) => {
     playSuccessSound();
-    fireConfetti();
-    setRoastResult(result);
+    setAnswers({ ...answers, [currentStep.step]: trait });
 
-    const updated = [result, ...history.slice(0, 4)];
-    setHistory(updated);
-    try {
-      localStorage.setItem('pranklab-roast-history', JSON.stringify(updated));
-    } catch (e) {
-      // ignore
+    if (currentStepIndex < ROAST_STEPS.length - 1) {
+      setCurrentStepIndex((prev) => prev + 1);
+    } else {
+      generateFinalRoast();
     }
   };
 
-  const handleCopy = () => {
-    if (!roastResult) return;
-    const text = `🔥 ROAST OF ${roastResult.name.toUpperCase()} 🔥\n\n"${roastResult.roastText}"\n\n• Burn Rating: ${roastResult.burnRating}/10\n• Emotional Damage: ${roastResult.emotionalDamage}\n— Generated by PrankLab 🤡`;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+  const generateFinalRoast = () => {
+    playCelebrationSound();
+    fireCannons();
+
+    const name = friendName.trim() || "My Friend";
+
+    const customParagraphs = [
+      `Let it be etched into public record that ${name} is a certified menace to society.`,
+      `Their biological clock is in shambles—relying on 14 alarms while sleeping horizontally like an unbothered sloth.`,
+      `Communication with ${name} requires historical patience; they will read your urgent message, mentally draft a reply in their dreams, and emerge 3 weeks later like an archeological discovery.`,
+      `When it comes to dining, ${name}'s signature move is declaring 'I'm not hungry' and then inhaling 85% of your French fries without blinking.`,
+      `Navigation? ${name} would argue with satellite telemetry while holding a map upside down.`,
+      `Yet somehow, despite these catastrophic red flags, they remain your friend—mostly because finding someone else with this exact level of chaotic comedy is nearly impossible.`,
+    ];
+
+    setRoastReport({
+      name,
+      roastText: customParagraphs.join(' '),
+      burnRating: (9.1 + Math.random() * 0.8).toFixed(1),
+      survivability: "14%",
+      recommendation: "Treat them to dinner, but keep your fries under strict surveillance.",
+    });
+  };
+
+  const handleReset = () => {
+    setCurrentStepIndex(0);
+    setFriendName('');
+    setAnswers({});
+    setRoastReport(null);
   };
 
   return (
@@ -147,10 +168,7 @@ export default function RoastMyFriendApp() {
       emoji="🔥"
       category="Comedy & Roasting"
       accentColor="#f95738"
-      onReset={() => {
-        setFriendName('');
-        setRoastResult(null);
-      }}
+      onReset={handleReset}
     >
       <Box sx={{ maxWidth: 720, mx: 'auto', mt: 1 }}>
         <Paper
@@ -163,214 +181,208 @@ export default function RoastMyFriendApp() {
             boxShadow: '0 12px 40px rgba(249, 87, 56, 0.08)',
           }}
         >
+          {/* Header */}
           <Box sx={{ textAlign: 'center', mb: 3 }}>
-            <Box sx={{ fontSize: 56, mb: 1 }}>🔥</Box>
+            <Box sx={{ fontSize: 54, mb: 1 }}>🔥</Box>
             <Typography variant="h4" fontWeight={900} sx={{ mb: 1 }}>
-              Roast My Friend Generator
+              Roast Interrogation & Deep Scan
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Enter your victim's name, choose their fatal flaw, and let automated comedy deliver the truth.
+              An 8-step forensic investigation to uncover your friend's worst traits and compile the ultimate burn.
             </Typography>
           </Box>
 
-          <Stack spacing={3}>
-            {/* Friend Name Field */}
-            <TextField
-              fullWidth
-              label="Friend's Name or Nickname"
-              placeholder="e.g. Rahul, Sneha, That One Guy..."
-              value={friendName}
-              onChange={(e) => setFriendName(e.target.value)}
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: '16px' } }}
-            />
-
-            {/* Personality Archetypes */}
+          {!roastReport ? (
             <Box>
-              <Typography fontWeight={800} fontSize={14.5} sx={{ mb: 1.5 }}>
-                Select Their Core Personality Flaw:
-              </Typography>
-              <Box
+              {/* Step indicator */}
+              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                <Typography variant="caption" fontWeight={800} color="#ea580c">
+                  Step {currentStepIndex + 1} of {ROAST_STEPS.length}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" fontWeight={700}>
+                  {Math.round(((currentStepIndex + 1) / ROAST_STEPS.length) * 100)}% analyzed
+                </Typography>
+              </Stack>
+
+              <LinearProgress
+                variant="determinate"
+                value={((currentStepIndex + 1) / ROAST_STEPS.length) * 100}
                 sx={{
-                  display: 'grid',
-                  gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' },
-                  gap: 1.2,
+                  height: 8,
+                  borderRadius: 4,
+                  mb: 3.5,
+                  bgcolor: '#ffedd5',
+                  '& .MuiLinearProgress-bar': {
+                    background: 'linear-gradient(90deg, #fb923c, #ea580c)',
+                  },
                 }}
-              >
-                {PERSONALITIES.map((p) => {
-                  const isSelected = selectedPersona === p.id;
-                  return (
+              />
+
+              {/* Step Header */}
+              <Box sx={{ textAlign: 'center', mb: 3 }}>
+                <Box sx={{ fontSize: 44, mb: 1 }}>{currentStep.emoji}</Box>
+                <Typography variant="h5" fontWeight={900} sx={{ mb: 0.5 }}>
+                  {currentStep.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {currentStep.subtitle}
+                </Typography>
+              </Box>
+
+              {/* Step 1: Input Name */}
+              {currentStep.step === 1 ? (
+                <Stack spacing={2.5}>
+                  <TextField
+                    fullWidth
+                    label="Victim's Full Name or Nickname"
+                    value={friendName}
+                    onChange={(e) => setFriendName(e.target.value)}
+                    placeholder="e.g. Rahul, Sneha, Rohan..."
+                    sx={{ '& .MuiOutlinedInput-root': { borderRadius: '16px' } }}
+                    autoFocus
+                  />
+                  <Button
+                    variant="contained"
+                    size="large"
+                    endIcon={<ArrowForwardRoundedIcon />}
+                    disabled={!friendName.trim()}
+                    onClick={() => setCurrentStepIndex(1)}
+                    sx={{
+                      background: 'linear-gradient(135deg, #ea580c, #c2410c)',
+                      fontWeight: 800,
+                      py: 1.3,
+                    }}
+                  >
+                    Lock In Target → Next Step
+                  </Button>
+                </Stack>
+              ) : (
+                /* Steps 2-8: Option cards */
+                <Stack spacing={1.5}>
+                  {currentStep.options.map((opt, i) => (
                     <Paper
-                      key={p.id}
+                      key={i}
                       elevation={0}
-                      onClick={() => setSelectedPersona(p.id)}
+                      onClick={() => handleSelectOption(opt.trait)}
                       sx={{
-                        p: 1.5,
+                        p: 2,
                         borderRadius: '16px',
+                        border: '1.5px solid #fed7aa',
                         cursor: 'pointer',
-                        textAlign: 'center',
                         transition: 'all 0.2s ease',
-                        border: isSelected ? '2px solid #f95738' : '1px solid #fed7aa',
-                        bgcolor: isSelected ? '#fff7ed' : 'transparent',
-                        transform: isSelected ? 'translateY(-2px)' : 'none',
-                        boxShadow: isSelected ? '0 4px 14px rgba(249, 87, 56, 0.2)' : 'none',
-                        '&:hover': { borderColor: '#f97316' },
+                        '&:hover': {
+                          borderColor: '#ea580c',
+                          bgcolor: '#fff7ed',
+                          transform: 'translateY(-2px)',
+                        },
                       }}
                     >
-                      <Box sx={{ fontSize: 26, mb: 0.5 }}>{p.emoji}</Box>
-                      <Typography fontWeight={800} fontSize={12.5}>
-                        {p.label}
+                      <Typography fontWeight={800} fontSize={14.5} color="#431407">
+                        {opt.label}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.3 }}>
+                        {opt.desc}
                       </Typography>
                     </Paper>
-                  );
-                })}
-              </Box>
+                  ))}
+                </Stack>
+              )}
+
+              {/* Previous step button */}
+              {currentStepIndex > 0 && (
+                <Box sx={{ mt: 3, textAlign: 'left' }}>
+                  <Button
+                    size="small"
+                    startIcon={<ArrowBackRoundedIcon />}
+                    onClick={() => setCurrentStepIndex((prev) => prev - 1)}
+                    sx={{ color: '#ea580c', fontWeight: 700 }}
+                  >
+                    Previous Step
+                  </Button>
+                </Box>
+              )}
             </Box>
-
-            {/* Intensity Selector */}
-            <Box>
-              <Typography fontWeight={800} fontSize={14.5} sx={{ mb: 1 }}>
-                Roast Intensity Level:
-              </Typography>
-              <Stack direction="row" spacing={1.5}>
-                {['Mild 🌶️', 'Savage 🔥', 'Extra Dramatic 🌋'].map((level) => {
-                  const cleanLevel = level.split(' ')[0];
-                  const isSelected = intensity === cleanLevel;
-                  return (
-                    <Chip
-                      key={level}
-                      label={level}
-                      onClick={() => setIntensity(cleanLevel)}
-                      sx={{
-                        fontWeight: 800,
-                        px: 1,
-                        py: 2,
-                        borderRadius: '12px',
-                        cursor: 'pointer',
-                        bgcolor: isSelected ? '#ea580c' : '#ffedd5',
-                        color: isSelected ? '#ffffff' : '#9a3412',
-                        border: isSelected ? '2px solid #ea580c' : '1px solid #fdba74',
-                        '&:hover': { bgcolor: isSelected ? '#c2410c' : '#fed7aa' },
-                      }}
-                    />
-                  );
-                })}
-              </Stack>
-            </Box>
-
-            {/* Submit Button */}
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<LocalFireDepartmentRoundedIcon />}
-              onClick={handleRoast}
-              sx={{
-                background: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)',
-                boxShadow: '0 8px 24px rgba(234, 88, 12, 0.35)',
-                fontSize: 16,
-                fontWeight: 900,
-                py: 1.4,
-              }}
-            >
-              Generate Brutal Roast 🔥
-            </Button>
-          </Stack>
-
-          {/* Roast Result Scorecard */}
-          {roastResult && (
+          ) : (
+            /* Final Burn Scorecard */
             <Card
               sx={{
-                mt: 4,
-                borderRadius: '22px',
-                border: '2px solid #f97316',
+                p: { xs: 2.5, sm: 4 },
+                borderRadius: '24px',
+                border: '2px solid #ea580c',
                 background: 'linear-gradient(180deg, #fffaf5 0%, #fff7ed 100%)',
-                boxShadow: '0 16px 40px rgba(234, 88, 12, 0.15)',
-                p: { xs: 2.5, sm: 3.5 },
                 textAlign: 'center',
               }}
             >
               <Chip
-                label={`VERDICT FOR ${roastResult.name.toUpperCase()} ${roastResult.emoji}`}
-                size="small"
-                sx={{
-                  bgcolor: '#ffedd5',
-                  color: '#c2410c',
-                  fontWeight: 900,
-                  fontSize: 11,
-                  mb: 2,
-                }}
+                icon={<LocalFireDepartmentRoundedIcon sx={{ fontSize: 16 }} />}
+                label={`FORENSIC COMEDY DOSSIER: ${roastReport.name.toUpperCase()}`}
+                sx={{ bgcolor: '#ffedd5', color: '#c2410c', fontWeight: 900, mb: 2 }}
               />
 
-              <Typography
-                variant="h5"
-                fontWeight={800}
-                fontStyle="italic"
-                sx={{
-                  mb: 3,
-                  color: '#431407',
-                  lineHeight: 1.4,
-                  px: { xs: 0, sm: 2 },
-                }}
-              >
-                “{roastResult.roastText}”
+              <Typography variant="h5" fontWeight={900} sx={{ mb: 2, color: '#431407' }}>
+                The Complete Breakdown of {roastReport.name} 🔥
               </Typography>
 
-              {/* Scorecard Stats */}
-              <Grid container spacing={1.5} sx={{ mb: 3 }}>
-                <Grid item xs={4}>
-                  <Box sx={{ p: 1.5, bgcolor: '#ffffff', borderRadius: '16px', border: '1px solid #fed7aa' }}>
-                    <Typography variant="caption" color="text.secondary" fontWeight={700}>
-                      BURN LEVEL
+              <Box sx={{ p: 2.5, bgcolor: '#ffffff', borderRadius: '18px', border: '1px solid #fed7aa', mb: 3, textAlign: 'left' }}>
+                <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75 }}>
+                  {roastReport.roastText}
+                </Typography>
+              </Box>
+
+              <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid item xs={6} sm={4}>
+                  <Box sx={{ p: 1.5, bgcolor: '#ffffff', borderRadius: '14px', border: '1px solid #fed7aa' }}>
+                    <Typography variant="caption" fontWeight={700} color="text.secondary">
+                      BURN RATING
                     </Typography>
                     <Typography fontWeight={900} fontSize={18} color="#ea580c">
-                      {roastResult.burnRating} / 10
+                      {roastReport.burnRating} / 10
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={4}>
-                  <Box sx={{ p: 1.5, bgcolor: '#ffffff', borderRadius: '16px', border: '1px solid #fed7aa' }}>
-                    <Typography variant="caption" color="text.secondary" fontWeight={700}>
-                      DAMAGE
+                <Grid item xs={6} sm={4}>
+                  <Box sx={{ p: 1.5, bgcolor: '#ffffff', borderRadius: '14px', border: '1px solid #fed7aa' }}>
+                    <Typography variant="caption" fontWeight={700} color="text.secondary">
+                      SURVIVABILITY
                     </Typography>
-                    <Typography fontWeight={900} fontSize={14} color="#ea580c" sx={{ mt: 0.5 }}>
-                      {roastResult.emotionalDamage}
+                    <Typography fontWeight={900} fontSize={18} color="#ea580c">
+                      {roastReport.survivability}
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={4}>
-                  <Box sx={{ p: 1.5, bgcolor: '#ffffff', borderRadius: '16px', border: '1px solid #fed7aa' }}>
-                    <Typography variant="caption" color="text.secondary" fontWeight={700}>
-                      STATUS
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ p: 1.5, bgcolor: '#ffffff', borderRadius: '14px', border: '1px solid #fed7aa' }}>
+                    <Typography variant="caption" fontWeight={700} color="text.secondary">
+                      VERDICT
                     </Typography>
-                    <Typography fontWeight={900} fontSize={14} color="#ea580c" sx={{ mt: 0.5 }}>
-                      Cooked 🍳
+                    <Typography fontWeight={900} fontSize={14} color="#ea580c">
+                      Cooked to Crisp 🍳
                     </Typography>
                   </Box>
                 </Grid>
               </Grid>
 
-              {/* Action Buttons */}
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} justifyContent="center">
                 <Button
                   variant="contained"
                   startIcon={<ContentCopyRoundedIcon />}
-                  onClick={handleCopy}
-                  sx={{
-                    bgcolor: '#ea580c',
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    '&:hover': { bgcolor: '#c2410c' },
+                  onClick={() => {
+                    const text = `🔥 OFFICIAL ROAST OF ${roastReport.name.toUpperCase()} 🔥\n\n${roastReport.roastText}\n\n• Burn Rating: ${roastReport.burnRating}/10\n• Generated on PrankLab by Tarun Tiwari 🤡`;
+                    navigator.clipboard.writeText(text);
+                    alert("Roast copied to clipboard! Send it to them! 📋");
                   }}
+                  sx={{ bgcolor: '#ea580c', color: '#ffffff', fontWeight: 800, '&:hover': { bgcolor: '#c2410c' } }}
                 >
-                  {copied ? 'Copied to Clipboard! 📋' : 'Copy Roast'}
+                  Share Roast with {roastReport.name} 📋
                 </Button>
 
                 <Button
                   variant="outlined"
                   startIcon={<CasinoRoundedIcon />}
-                  onClick={handleRoast}
+                  onClick={handleReset}
                   sx={{ borderColor: '#ea580c', color: '#ea580c', fontWeight: 800 }}
                 >
-                  Roast Again 🎲
+                  Roast Another Friend
                 </Button>
               </Stack>
             </Card>
